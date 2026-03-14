@@ -46,7 +46,16 @@ services:
   report-service:
     build: ./services/report-service
     ports:
-      - "${REPORT_SERVICE_PORT}:3000"
+      - "${REPORT_SERVICE_PORT:-3004}:3000"
+    volumes:
+      - reports_data:/app/reports_data
+    environment:
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - EMAIL_TO=${EMAIL_TO}
     env_file:
       - .env
 
@@ -59,3 +68,4 @@ services:
 
 volumes:
   mongodb_data:
+  reports_data:
