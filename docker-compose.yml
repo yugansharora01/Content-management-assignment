@@ -32,7 +32,10 @@ services:
   content-service:
     build: ./services/content-service
     ports:
-      - "${CONTENT_SERVICE_PORT}:3000"
+      - "${CONTENT_SERVICE_PORT:-3002}:3000"
+    environment:
+      - AUDIT_SERVICE_URL=http://audit-service:3000
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3000
     env_file:
       - .env
 
