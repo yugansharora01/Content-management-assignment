@@ -1,10 +1,6 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  if (req.path.startsWith("/auth/login")) {
-    return next();
-  }
-
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
