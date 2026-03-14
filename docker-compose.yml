@@ -1,33 +1,43 @@
-version: "3"
-
 services:
 
   api-gateway:
     build: ./api-gateway
     ports:
-      - "3000:3000"
+      - "${API_GATEWAY_PORT}:3000"
+    env_file:
+      - .env
 
   auth-service:
     build: ./services/auth-service
     ports:
-      - "4001:4001"
+      - "${AUTH_SERVICE_PORT}:3000"
+    env_file:
+      - .env
 
   content-service:
     build: ./services/content-service
     ports:
-      - "4002:4002"
+      - "${CONTENT_SERVICE_PORT}:3000"
+    env_file:
+      - .env
 
   notification-service:
     build: ./services/notification-service
     ports:
-      - "4003:4003"
+      - "${NOTIFICATION_SERVICE_PORT}:3000"
+    env_file:
+      - .env
 
   report-service:
     build: ./services/report-service
     ports:
-      - "4004:4004"
+      - "${REPORT_SERVICE_PORT}:3000"
+    env_file:
+      - .env
 
   audit-service:
     build: ./services/audit-service
     ports:
-      - "4005:4005"
+      - "${AUDIT_SERVICE_PORT}:3000"
+    env_file:
+      - .env
