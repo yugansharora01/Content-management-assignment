@@ -42,7 +42,7 @@ services:
   notification-service:
     build: ./services/notification-service
     ports:
-      - "${NOTIFICATION_SERVICE_PORT}:3000"
+      - "${NOTIFICATION_SERVICE_PORT:-3003}:3000"
     env_file:
       - .env
 
