@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+
+  auth-service:
+    build: ./services/auth-service
+    ports:
+      - "4001:4001"
+
+  content-service:
+    build: ./services/content-service
+    ports:
+      - "4002:4002"
+
+  notification-service:
+    build: ./services/notification-service
+    ports:
+      - "4003:4003"
+
+  report-service:
+    build: ./services/report-service
+    ports:
+      - "4004:4004"
+
+  audit-service:
+    build: ./services/audit-service
+    ports:
+      - "4005:4005"
