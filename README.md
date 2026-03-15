@@ -58,7 +58,7 @@ The system is designed for high availability during deployments:
 ## 📄 Documentation
 - **Architecture**: See `/architecture/system-design.md`
 - **Postman Collection**: Found in `/postman/cms-api-collection.json`
-- **Walkthrough**: [walkthrough.md](./C:/Users/admin/.gemini/antigravity/brain/e269c8f8-a9b3-46aa-ae2a-b855d3227cc7/walkthrough.md)
+- **API Details**: See `/architecture/system-architecture.md`
 
 ## 🧪 Testing
 Use the provided Postman collection to test individual microservices through the API Gateway. 
