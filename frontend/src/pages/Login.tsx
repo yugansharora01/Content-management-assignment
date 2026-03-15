@@ -8,8 +8,8 @@ import { Loader2, LayoutDashboard } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Login = () => {
-  const [email, setEmail] = useState('admin@example.com');
-  const [password, setPassword] = useState('adminpassword123');
+  const [email, setEmail] = useState('admin@cms.com');
+  const [password, setPassword] = useState('admin123');
   const [error, setError] = useState('');
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
