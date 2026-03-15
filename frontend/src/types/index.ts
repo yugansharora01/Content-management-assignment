@@ -73,3 +73,10 @@ export interface AuthResponse {
   token: string;
   user: User;
 }
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  page: number;
+  totalPages: number;
+  total: number;
+}

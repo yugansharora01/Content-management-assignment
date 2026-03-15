@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { useAuth } from '@/contexts/AuthContext';
-import type { ContentItem, AuditLog } from '@/types';
+import type { ContentItem, AuditLog, PaginatedResponse } from '@/types';
 import { Card } from '@/components/ui/card';
 import { FileText, TrendingUp, BarChart3, Monitor, Clock } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -20,11 +20,11 @@ const DashboardPage = () => {
 
   useEffect(() => {
     Promise.all([
-      api.get<ContentItem[]>('/content').catch(() => [] as ContentItem[]),
-      api.get<AuditLog[]>('/audit').catch(() => [] as AuditLog[]),
-    ]).then(([c, a]) => {
-      setContent(c);
-      setAuditLogs(a);
+      api.get<PaginatedResponse<ContentItem>>('/content').catch(() => ({ data: [] } as any)),
+      api.get<PaginatedResponse<AuditLog>>('/audit').catch(() => ({ data: [] } as any)),
+    ]).then(([contentRes, auditRes]) => {
+      setContent(contentRes.data || []);
+      setAuditLogs(auditRes.data || []);
       setLoading(false);
     });
   }, []);
@@ -175,3 +175,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

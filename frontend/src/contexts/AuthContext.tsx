@@ -25,17 +25,27 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const storedUser = localStorage.getItem('user');
-  const [user, setUser] = useState<User | null>(storedUser ? JSON.parse(storedUser) : null);
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      return storedUser && storedUser !== 'undefined' ? JSON.parse(storedUser) : null;
+    } catch {
+      localStorage.removeItem('user');
+      return null;
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const res = await api.post<{ token: string; user: User }>('/auth/login', { email, password });
-      localStorage.setItem('auth_token', res.token);
-      localStorage.setItem('user', JSON.stringify(res.user));
-      setUser(res.user);
+      // Backend returns { _id, email, role, token } flat — not { user, token }
+      const res = await api.post<{ _id: string; email: string; role: string; token: string }>('/auth/login', { email, password });
+      const { token, ...userFields } = res;
+      const userObj = userFields as unknown as User;
+      localStorage.setItem('auth_token', token);
+      localStorage.setItem('user', JSON.stringify(userObj));
+      setUser(userObj);
     } finally {
       setIsLoading(false);
     }

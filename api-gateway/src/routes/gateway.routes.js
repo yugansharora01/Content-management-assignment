@@ -22,7 +22,7 @@ router.use(
     pathRewrite: {
       "^/auth": ""
     },
-    on: { error: onProxyError, }
+    on: { error: onProxyError }
   })
 );
 

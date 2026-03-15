@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
-import type { ContentItem } from '@/types';
+import type { ContentItem, PaginatedResponse } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,8 +30,8 @@ const ContentPage = () => {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await api.get<ContentItem[]>('/content');
-      setContent(data);
+      const response = await api.get<PaginatedResponse<ContentItem>>('/content');
+      setContent(response.data || []);
     } catch {
       toast.error('Failed to load content');
     } finally {
@@ -178,3 +178,4 @@ const ContentPage = () => {
 };
 
 export default ContentPage;
+

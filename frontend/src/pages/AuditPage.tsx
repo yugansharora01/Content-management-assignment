@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/services/api';
-import type { AuditLog } from '@/types';
+import type { AuditLog, PaginatedResponse } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
@@ -26,8 +26,11 @@ const AuditPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<AuditLog[]>('/audit')
-      .then(d => { setLogs(d); setLoading(false); })
+    api.get<PaginatedResponse<AuditLog>>('/audit')
+      .then(res => { 
+        setLogs(res.data || []); 
+        setLoading(false); 
+      })
       .catch(() => setLoading(false));
   }, []);
 
@@ -72,5 +75,6 @@ const AuditPage = () => {
     </div>
   );
 };
+
 
 export default AuditPage;
