@@ -10,15 +10,15 @@ const seedAdmin = async () => {
         await connectDB();
 
         // Check if admin already exists
-        const adminExists = await User.findOne({ email: 'admin@example.com' });
+        const adminExists = await User.findOne({ email: 'admin@cms.com' });
         if (adminExists) {
             console.log('Admin user already exists');
             process.exit(0);
         }
 
         const admin = new User({
-            email: 'admin@example.com',
-            password: 'adminpassword123', // In a real app this should come from env or secure input
+            email: 'admin@cms.com',
+            password: 'admin123', // Matches README and UI defaults
             role: 'admin'
         });
 
