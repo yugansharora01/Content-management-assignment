@@ -25,7 +25,7 @@ const ContentPage = () => {
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<ContentItem | null>(null);
-  const [form, setForm] = useState({ title: '', body: '', category: 'General', status: 'draft' as ContentItem['status'] });
+  const [form, setForm] = useState({ title: '', body: '', status: 'draft' as ContentItem['status'] });
 
   const load = async () => {
     setLoading(true);
@@ -43,20 +43,20 @@ const ContentPage = () => {
 
   const openCreate = () => {
     setEditing(null);
-    setForm({ title: '', body: '', category: 'General', status: 'draft' });
+    setForm({ title: '', body: '', status: 'draft' });
     setDialogOpen(true);
   };
 
   const openEdit = (item: ContentItem) => {
     setEditing(item);
-    setForm({ title: item.title, body: item.body, category: item.category, status: item.status });
+    setForm({ title: item.title, body: item.body, status: item.status });
     setDialogOpen(true);
   };
 
   const handleSave = async () => {
     try {
       if (editing) {
-        await api.put(`/content/${editing.id}`, form);
+        await api.put(`/content/${editing._id}`, form);
         toast.success('Content updated');
       } else {
         await api.post('/content', form);
@@ -81,7 +81,7 @@ const ContentPage = () => {
 
   const filtered = content.filter(c =>
     c.title.toLowerCase().includes(search.toLowerCase()) ||
-    c.category.toLowerCase().includes(search.toLowerCase())
+    c.body.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -109,20 +109,20 @@ const ContentPage = () => {
       ) : (
         <div className="grid gap-3">
           {filtered.map((item, i) => (
-            <motion.div key={item.id} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+            <motion.div key={item._id} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
               <Card className="flex items-center justify-between p-4 card-shadow">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="text-sm font-medium text-foreground truncate">{item.title}</h3>
                     <Badge variant="outline" className={statusStyles[item.status]}>{item.status}</Badge>
                   </div>
-                  <p className="mt-0.5 text-xs text-muted-foreground">{item.category} · Updated {new Date(item.updatedAt).toLocaleDateString()}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">Updated {new Date(item.updatedAt).toLocaleDateString()}</p>
                 </div>
                 <div className="flex items-center gap-1 ml-4">
                   <Button variant="ghost" size="icon" onClick={() => openEdit(item)}>
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)} className="text-destructive hover:text-destructive">
+                  <Button variant="ghost" size="icon" onClick={() => handleDelete(item._id)} className="text-destructive hover:text-destructive">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -149,11 +149,7 @@ const ContentPage = () => {
               <Label>Body</Label>
               <Textarea value={form.body} onChange={e => setForm(f => ({ ...f, body: e.target.value }))} rows={4} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Category</Label>
-                <Input value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} />
-              </div>
+            <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
                 <Label>Status</Label>
                 <Select value={form.status} onValueChange={v => setForm(f => ({ ...f, status: v as ContentItem['status'] }))}>

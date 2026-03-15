@@ -20,7 +20,9 @@ const clearContentCache = async (contentId = null) => {
 
 export const createContent = async (req, res) => {
     try {
-        const { title, body, authorId, tags, status } = req.body;
+        const { title, body, tags, status } = req.body;
+        const authorId = req.body.authorId || req.headers['x-user-id'];
+        
         const newContent = new Content({ title, body, authorId, tags, status });
         const saved = await newContent.save();
 

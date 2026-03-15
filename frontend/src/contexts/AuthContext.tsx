@@ -76,14 +76,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const markNotificationRead = useCallback(async (id: string) => {
     try {
       await api.put(`/notifications/${id}/read`);
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+      setNotifications(prev => prev.map(n => n._id === id ? { ...n, read: true } : n));
     } catch {}
   }, []);
 
   const markAllNotificationsRead = useCallback(async () => {
     try {
       const unread = notifications.filter(n => !n.read);
-      await Promise.all(unread.map(n => api.put(`/notifications/${n.id}/read`)));
+      await Promise.all(unread.map(n => api.put(`/notifications/${n._id}/read`)));
       setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     } catch {}
   }, [notifications]);

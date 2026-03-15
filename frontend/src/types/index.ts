@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  _id: string;
   email: string;
   name: string;
   role: 'admin' | 'editor' | 'viewer';
@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface Device {
-  id: string;
+  _id: string;
   name: string;
   browser: string;
   ip: string;
@@ -17,27 +17,26 @@ export interface Device {
 }
 
 export interface ContentItem {
-  id: string;
+  _id: string;
   title: string;
   body: string;
   status: 'draft' | 'published' | 'archived';
   author: string;
   createdAt: string;
   updatedAt: string;
-  category: string;
 }
 
 export interface AuditLog {
-  id: string;
+  _id: string;
   action: string;
   user: string;
-  details: string;
-  timestamp: string;
+  details: any;
+  createdAt: string;
   ip: string;
 }
 
 export interface Report {
-  id: string;
+  _id: string;
   name: string;
   type: 'user_activity' | 'content_stats' | 'system_activity';
   status: 'pending' | 'generating' | 'completed' | 'failed';
@@ -46,12 +45,12 @@ export interface Report {
 }
 
 export interface Notification {
-  id: string;
+  _id: string;
   type: 'content_created' | 'report_generated' | 'login_alert' | 'system';
   title: string;
   message: string;
   read: boolean;
-  timestamp: string;
+  createdAt: string;
 }
 
 export interface DashboardStats {

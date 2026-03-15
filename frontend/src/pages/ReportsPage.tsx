@@ -80,7 +80,7 @@ const ReportsPage = () => {
       ) : (
         <div className="grid gap-3">
           {reports.map((report, i) => (
-            <motion.div key={report.id} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+            <motion.div key={report._id} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
               <Card className="flex items-center justify-between p-4 card-shadow">
                 <div>
                   <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ const ReportsPage = () => {
                 </div>
                 {report.status === 'completed' && (
                   <a
-                    href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/reports/download/${report.id}`}
+                    href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/reports/download/${report._id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

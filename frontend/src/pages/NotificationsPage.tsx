@@ -42,10 +42,10 @@ const NotificationsPage = () => {
           const Icon = typeIcons[n.type] || Bell;
           const colorClass = typeColors[n.type] || 'bg-muted text-muted-foreground';
           return (
-            <motion.div key={n.id} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+            <motion.div key={n._id} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
               <Card
                 className={`flex cursor-pointer items-center gap-4 p-4 card-shadow transition-colors hover:bg-secondary/50 ${!n.read ? 'border-l-2 border-l-primary' : ''}`}
-                onClick={() => !n.read && markNotificationRead(n.id)}
+                onClick={() => !n.read && markNotificationRead(n._id)}
               >
                 <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${colorClass}`}>
                   <Icon className="h-4 w-4" />
@@ -58,7 +58,7 @@ const NotificationsPage = () => {
                   <p className="text-xs text-muted-foreground">{n.message}</p>
                 </div>
                 <p className="text-xs text-muted-foreground shrink-0">
-                  {formatDistanceToNow(new Date(n.timestamp), { addSuffix: true })}
+                  {formatDistanceToNow(new Date(n.createdAt), { addSuffix: true })}
                 </p>
               </Card>
             </motion.div>
