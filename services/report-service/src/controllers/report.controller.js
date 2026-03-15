@@ -5,6 +5,15 @@ import { sendReportEmail } from '../config/mail.js';
 import path from 'path';
 import fs from 'fs';
 
+export const getReports = async (req, res) => {
+    try {
+        const reports = await Report.find().sort({ createdAt: -1 });
+        res.json(reports);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching reports', error: error.message });
+    }
+};
+
 export const triggerReportGeneration = async (triggerType = 'manual', emailTo = null) => {
     const filename = `report-${Date.now()}.pdf`;
     const reportRecord = new Report({ filename, trigger: triggerType, status: 'pending' });
