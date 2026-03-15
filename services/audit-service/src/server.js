@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/api/audit", auditRoutes);
+app.use("/", auditRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });

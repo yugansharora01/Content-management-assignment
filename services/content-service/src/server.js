@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/api/content", contentRoutes);
+app.use("/content", contentRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });

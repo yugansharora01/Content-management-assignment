@@ -21,7 +21,10 @@ router.use(
   verifyToken,
   createProxyMiddleware({
     target: services.content,
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: {
+      "^/content": ""
+    }
   })
 );
 
@@ -30,7 +33,10 @@ router.use(
   verifyToken,
   createProxyMiddleware({
     target: services.report,
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: {
+      "^/reports": ""
+    }
   })
 );
 
@@ -39,7 +45,10 @@ router.use(
   verifyToken,
   createProxyMiddleware({
     target: services.audit,
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: {
+      "^/audit": ""
+    }
   })
 );
 
@@ -48,7 +57,10 @@ router.use(
   verifyToken,
   createProxyMiddleware({
     target: services.notification,
-    changeOrigin: true
+    changeOrigin: true,
+    pathRewrite: {
+      "^/notifications": ""
+    }
   })
 );
 
