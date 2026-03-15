@@ -10,11 +10,30 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:8080",
-    credentials: true
-}));
-app.use(express.json());
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:8080")
+    .split(",")
+    .map(o => o.trim());
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow requests with no origin (e.g. curl, Postman) or matching origins
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error(`CORS: origin '${origin}' not allowed`));
+        }
+    },
+    credentials: true,
+};
+
+
+app.use((req, res, next) => {
+    if (req.method === "OPTIONS") {
+        return cors(corsOptions)(req, res, () => res.sendStatus(204));
+    }
+    next();
+});
+app.use(cors(corsOptions));
 app.use(loggerMiddleware);
 
 const PORT = process.env.PORT || 3000;
