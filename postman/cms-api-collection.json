@@ -1,0 +1,445 @@
+{
+	"info": {
+		"_postman_id": "8b9cad0e-1f20-43ce-a4db-912808c32493",
+		"name": "CMS Microservices API",
+		"description": "# CMS Microservices API Documentation\n\nThis collection provides a comprehensive set of API endpoints for the CMS Dashboard system, covering Authentication, Content Management, Analytics Reporting, Auditing, and Real-time Notifications.\n\n### Base URL\n- Local Development: `http://localhost:3000` (API Gateway)\n\n### Authentication\nMost endpoints require a JWT token passed in the `Authorization` header as a Bearer token.\n\n```http\nAuthorization: Bearer {{token}}\n```",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"description": "Endpoints for user authentication and session management.",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"description": "### Login User\nAuthenticates a user using email and password. On success, returns a JWT token and user profile details.\n\n**Payload:**\n- `email` (string, required): User's email address.\n- `password` (string, required): User's password.\n\n**Responses:**\n- `200 OK`: Authentication successful.\n- `401 Unauthorized`: Invalid credentials.\n- `500 Internal Server Error`: Generic server fault.",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@cms.com\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					},
+					"response": [
+						{
+							"name": "Success (200)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [{ "key": "Content-Type", "value": "application/json" }],
+								"body": { "mode": "raw", "raw": "{\n    \"email\": \"admin@cms.com\",\n    \"password\": \"admin123\"\n}" },
+								"url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"cookie": [],
+							"body": "{\n    \"_id\": \"65f4b3...\",\n    \"email\": \"admin@cms.com\",\n    \"role\": \"admin\",\n    \"token\": \"eyJhbGci...\"\n}"
+						},
+						{
+							"name": "Invalid Credentials (401)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [{ "key": "Content-Type", "value": "application/json" }],
+								"body": { "mode": "raw", "raw": "{\n    \"email\": \"wrong@cms.com\",\n    \"password\": \"wrong\"\n}" },
+								"url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Invalid email or password\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"description": "### Logout User\nInvalidates the user's current session by removing it from the active sessions list and blocklisting the token until expiry.\n\n**Responses:**\n- `200 OK`: Logout successful.\n- `400 Bad Request`: Token missing or invalid.\n- `500 Internal Server Error`: Generic server fault.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "logout"]
+						}
+					},
+					"response": [
+						{
+							"name": "Success (200)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+								"url": { "raw": "{{base_url}}/auth/logout", "host": ["{{base_url}}"], "path": ["auth", "logout"] }
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully logged out\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Content",
+			"description": "Endpoints for managing CMS content items.",
+			"item": [
+				{
+					"name": "List Content",
+					"request": {
+						"method": "GET",
+						"description": "### List All Content\nRetrieves a paginated list of content items sorted by creation date (newest first).\n\n**Query Parameters:**\n- `page` (number, optional): Page number (default: 1).\n- `limit` (number, optional): Items per page (default: 10).\n\n**Responses:**\n- `200 OK`: List retrieved successfully.\n- `500 Internal Server Error`: Database error.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/content?page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["content"],
+							"query": [
+								{ "key": "page", "value": "1" },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success (200)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+								"url": { "raw": "{{base_url}}/content?page=1&limit=10", "host": ["{{base_url}}"], "path": ["content"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "10" }] }
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{ "key": "Content-Type", "value": "application/json" }],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"_id\": \"65f4b8...\",\n            \"title\": \"Example Article\",\n            \"body\": \"Cras justo odio...\",\n            \"authorId\": \"65f4b3...\",\n            \"tags\": [\"tech\"],\n            \"status\": \"published\",\n            \"createdAt\": \"2024-03-15T10:00:00Z\"\n        }\n    ],\n    \"page\": 1,\n    \"totalPages\": 5,\n    \"total\": 48\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Content by ID",
+					"request": {
+						"method": "GET",
+						"description": "### Get Content by ID\nFetches details of a specific content item. Results are cached for 1 hour.\n\n**Path Variables:**\n- `id` (string, required): The hex ID of the content item.\n\n**Responses:**\n- `200 OK`: Content found.\n- `404 Not Found`: No content matches the provided ID.\n- `500 Internal Server Error`: Database error.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/content/:id",
+							"host": ["{{base_url}}"],
+							"path": ["content", ":id"],
+							"variable": [
+								{ "key": "id", "value": "content_id_here" }
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success (200)",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"body": "{\n    \"_id\": \"65f4b8...\",\n    \"title\": \"Example Article\",\n    \"body\": \"Cras justo odio...\",\n    \"authorId\": \"65f4b3...\",\n    \"tags\": [\"tech\"],\n    \"status\": \"published\"\n}"
+						},
+						{
+							"name": "Not Found (404)",
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"body": "{\n    \"message\": \"Content not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Content",
+					"request": {
+						"method": "POST",
+						"description": "### Create New Content\nInitializes a new content item. Caches are invalidated upon creation.\n\n**Payload:**\n- `title` (string): Article title.\n- `body` (string): Main content body.\n- `tags` (array): List of tag strings.\n- `status` (string): e.g., 'draft', 'published'.\n\n**Responses:**\n- `201 Created`: Content successfully saved.\n- `500 Internal Server Error`: Validation or database failure.",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"New Article\",\n    \"body\": \"This is the content body.\",\n    \"authorId\": \"user_id_here\",\n    \"tags\": [\"news\", \"update\"],\n    \"status\": \"draft\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/content",
+							"host": ["{{base_url}}"],
+							"path": ["content"]
+						}
+					},
+					"response": [
+						{
+							"name": "Created (201)",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"body": "{\n    \"_id\": \"65f4bf...\",\n    \"title\": \"New Article\",\n    \"body\": \"This is the content body.\",\n    \"authorId\": \"user_id_here\",\n    \"tags\": [\"news\", \"update\"],\n    \"status\": \"draft\",\n    \"createdAt\": \"2024-03-15T12:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Content",
+					"request": {
+						"method": "PUT",
+						"description": "### Update Content\nModifies an existing content piece. Partial updates are supported.\n\n**Responses:**\n- `200 OK`: Successfully updated.\n- `404 Not Found`: Content not found.\n- `500 Internal Server Error`: Generic failure.",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Article Title\",\n    \"body\": \"Updated content body.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/content/:id",
+							"host": ["{{base_url}}"],
+							"path": ["content", ":id"],
+							"variable": [
+								{ "key": "id", "value": "content_id_here" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Content",
+					"request": {
+						"method": "DELETE",
+						"description": "### Delete Content\nPermanently removes a content item from the database.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/content/:id",
+							"host": ["{{base_url}}"],
+							"path": ["content", ":id"],
+							"variable": [
+								{ "key": "id", "value": "content_id_here" }
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Deleted (200)",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"body": "{\n    \"message\": \"Content successfully deleted\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"description": "Endpoints for generating and accessing analytics reports.",
+			"item": [
+				{
+					"name": "Generate Report",
+					"request": {
+						"method": "POST",
+						"description": "### Trigger Report Generation\nStarts an asynchronous job to generate a PDF report of system analytics. An email is sent to the specified address upon completion.\n\n**Payload:**\n- `email` (string, optional): Recipient email address.\n\n**Responses:**\n- `202 Accepted`: Job queued successfully.\n- `500 Internal Server Error`: PDF generator or service error.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" },
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@cms.local\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/reports/generate",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "generate"]
+						}
+					},
+					"response": [
+						{
+							"name": "Accepted (202)",
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": "json",
+							"body": "{\n    \"message\": \"Report generation started\",\n    \"reportId\": \"65f4c2...\",\n    \"status\": \"pending\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Reports List",
+					"request": {
+						"method": "GET",
+						"description": "### Get All Reports\nReturns a history of all generated report records.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/reports",
+							"host": ["{{base_url}}"],
+							"path": ["reports"]
+						}
+					}
+				},
+				{
+					"name": "Download Report",
+					"request": {
+						"method": "GET",
+						"description": "### Download PDF Report\nStreams the PDF file for a completed report. Returns an error if the report is still pending.\n\n**Responses:**\n- `200 OK`: PDF stream.\n- `404 Not Found`: Report not found, file missing, or still processing.\n- `500 Internal Server Error`: File system error.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/reports/download/:id",
+							"host": ["{{base_url}}"],
+							"path": ["reports", "download", ":id"],
+							"variable": [
+								{ "key": "id", "value": "report_id_here" }
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Error Not Ready (404)",
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"body": "{\n    \"message\": \"Report not found or not yet completed\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Audit",
+			"description": "Endpoints for accessing system audit logs.",
+			"item": [
+				{
+					"name": "Get Audit Logs",
+					"request": {
+						"method": "GET",
+						"description": "### Search Audit Logs\nRetrieves system activities. Supports filtering by user or action type.\n\n**Query Parameters:**\n- `userId` (string, optional): Filter by user ID.\n- `action` (string, optional): Filter by action type (e.g., CONTENT_CREATED).\n\n**Responses:**\n- `200 OK`: Results returned successfuly.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/audit?userId=admin_123",
+							"host": ["{{base_url}}"],
+							"path": ["audit"],
+							"query": [
+								{ "key": "userId", "value": "admin_123" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Audit Log",
+					"request": {
+						"method": "POST",
+						"description": "### Record Custom Log\nManually inserts a log entry into the audit trail.\n\n**Responses:**\n- `201 Created`: Log saved.",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"MANUAL_CHECK\",\n    \"userId\": \"admin_123\",\n    \"details\": { \"note\": \"Monthly security review completed\" }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/audit",
+							"host": ["{{base_url}}"],
+							"path": ["audit"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"description": "Endpoints for managing user notifications.",
+			"item": [
+				{
+					"name": "Publish Notification",
+					"request": {
+						"method": "POST",
+						"description": "### Publish Notification\nSends a message to a user. This triggers a WebSocket event for real-time delivery.\n\n**Payload:**\n- `userId` (string): Recipient ID.\n- `message` (string): Notification text.\n- `type` (string): 'INFO', 'WARNING', 'ERROR'.\n\n**Responses:**\n- `201 Created`: Notification saved and broadcasted.",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"user_123\",\n    \"message\": \"Your report is ready for download.\",\n    \"type\": \"INFO\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/notifications/publish",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", "publish"]
+						}
+					}
+				},
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "GET",
+						"description": "### Get User Notifications\nRetrieves the 50 most recent notifications for the logged-in user.\n\n**Responses:**\n- `200 OK`: Array of notifications.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications",
+							"host": ["{{base_url}}"],
+							"path": ["notifications"]
+						}
+					}
+				},
+				{
+					"name": "Mark as Read",
+					"request": {
+						"method": "PUT",
+						"description": "### Mark Notification as Read\nUpdates the `isRead` status of a notification to true.\n\n**Responses:**\n- `200 OK`: successfully updated.\n- `404 Not Found`: Notification not found.",
+						"header": [
+							{ "key": "Authorization", "value": "Bearer {{token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/notifications/:id/read",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", ":id", "read"],
+							"variable": [
+								{ "key": "id", "value": "notification_id_here" }
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [ "" ]
+			}
+		}
+	],
+	"variable": [
+		{ "key": "base_url", "value": "http://localhost:3000" },
+		{ "key": "token", "value": "" }
+	]
+}
