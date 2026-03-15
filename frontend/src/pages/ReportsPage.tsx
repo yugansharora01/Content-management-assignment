@@ -91,7 +91,7 @@ const ReportsPage = () => {
                 </div>
                 {report.status === 'completed' && (
                   <a
-                    href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/reports/download/${report._id}`}
+                    href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/reports/download/${report._id}?token=${localStorage.getItem('auth_token')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

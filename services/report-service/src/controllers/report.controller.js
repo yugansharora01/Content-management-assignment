@@ -30,8 +30,12 @@ export const triggerReportGeneration = async (triggerType = 'manual', emailTo = 
         console.log(`[Report] Generation finished: ${filename}`);
 
         if (emailTo) {
-             console.log(`[Report] Sending email to ${emailTo}`);
-             await sendReportEmail(emailTo, filePath, filename);
+             try {
+                console.log(`[Report] Sending email to ${emailTo}`);
+                await sendReportEmail(emailTo, filePath, filename);
+             } catch (mailError) {
+                console.error(`[Report] Email sending failed but report is saved:`, mailError.message);
+             }
         }
 
         return reportRecord;
