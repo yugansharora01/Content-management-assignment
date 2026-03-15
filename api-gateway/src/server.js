@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import gatewayRoutes from "./routes/gateway.routes.js";
 import { loggerMiddleware } from "./middleware/logger.middleware.js";
 import { getRateLimiter } from "./middleware/rateLimiter.middleware.js";
@@ -9,6 +10,10 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:8080",
+    credentials: true
+}));
 app.use(express.json());
 app.use(loggerMiddleware);
 
